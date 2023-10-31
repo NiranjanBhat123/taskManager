@@ -1,0 +1,221 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Welcome</title>
+</head>
+
+<body>
+
+  {%for i in invalid%}
+  <p>{{i}}</p>
+  {%endfor%}
+
+
+  <form action="" method="POST" onsubmit="return checkPassword(this)" >
+    {%csrf_token%}
+
+    <div class="screen-1">
+      <div class="image" style="display: flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+        <h2>TaskManager</h2>
+        <img src="{%static 'logo.png'%}" style="height: 6rem;width:6rem;" alt="logo">
+      </div>
+      <div class="email" style="margin-bottom:2rem;">
+        <label for="username" style="font-size:.9rem;">Username</label>
+        <div class="sec-2">
+          <ion-icon name="mail-outline"></ion-icon>
+          <input type="text" name="username" style="font-size:.8rem;" />
+        </div>
+      </div>
+      <div class="email">
+        <label for="email" style="font-size:.9rem;">email</label>
+        <div class="sec-2">
+          <ion-icon name="mail-outline"></ion-icon>
+          <input type="email" name="email" style="font-size:.8rem;" />
+        </div>
+      </div>
+      <div class="password">
+        <label for="password">Password</label>
+        <div class="sec-2">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <input class="pas" style="font-size:.8rem;" type="password" name="password" placeholder="" />
+          <ion-icon class="show-hide" name="eye-outline"></ion-icon>
+        </div>
+      </div>
+      <div class="password">
+        <label for="password">Confirm password</label>
+        <div class="sec-2">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <input class="pas" style="font-size:.8rem;" type="password" name="cnfpassword" placeholder="" />
+          <ion-icon class="show-hide" name="eye-outline"></ion-icon>
+        </div>
+      </div>
+      <button type="submit" class="login">Signup</button>
+      <div class="footer" style="text-align: center;"><span>already have an account ? <a
+            href="{%url 'login'%}">login</a></span></div>
+    </div>
+  </form>
+
+</body>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Montserrat:wght@200;300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Yatra+One&display=swap');
+
+
+  * {
+    font-family: "Montserrat";
+  }
+
+  body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow-y: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #dde5f4;
+    height: 100vh;
+  }
+
+  .screen-1 {
+    background: #f1f7fe;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    box-shadow: 0 0 2em #e6e9f9;
+    gap: 2em;
+  }
+
+  .screen-1 .logo {
+    margin-top: -3em;
+  }
+
+  .screen-1 .email {
+    background: white;
+    box-shadow: 0 0 2em #e6e9f9;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    border-radius: 20px;
+    color: #4d4d4d;
+    margin-top: -3em;
+  }
+
+  .screen-1 .email input {
+    outline: none;
+    border: none;
+  }
+
+  .screen-1 .email input::-moz-placeholder {
+    color: black;
+    font-size: 0.9em;
+  }
+
+  .screen-1 .email input:-ms-input-placeholder {
+    color: black;
+    font-size: 0.9em;
+  }
+
+  .screen-1 .email input::placeholder {
+    color: black;
+    font-size: 0.9em;
+  }
+
+  .screen-1 .email ion-icon {
+    color: #4d4d4d;
+    margin-bottom: -0.2em;
+  }
+
+  .screen-1 .password {
+    background: white;
+    box-shadow: 0 0 2em #e6e9f9;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 20px;
+    color: #4d4d4d;
+  }
+
+  .screen-1 .password input {
+    outline: none;
+    border: none;
+  }
+
+  .screen-1 .password input::-moz-placeholder {
+    color: black;
+
+  }
+
+  .screen-1 .password input:-ms-input-placeholder {
+    color: black;
+
+  }
+
+  .screen-1 .password input::placeholder {
+    color: black;
+
+  }
+
+  .screen-1 .password ion-icon {
+    color: #4d4d4d;
+    margin-bottom: -0.2em;
+  }
+
+  .screen-1 .password .show-hide {
+    margin-right: -5em;
+  }
+
+  .screen-1 .login {
+    padding: 1em;
+    background: #3e4684;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+  }
+
+  .screen-1 .footer {
+    width: 20rem;
+
+    font-size: 0.7em;
+    color: #5e5e5e;
+    gap: 14em;
+
+  }
+
+  .screen-1 .footer span {
+    cursor: pointer;
+  }
+
+  button {
+    cursor: pointer;
+  }
+</style>
+
+<script>
+
+  // Function to check Whether both passwords 
+  // is same or not. 
+  function checkPassword(form) {
+    password1 = form.password.value;
+    password2 = form.cnfpassword.value;
+
+
+
+    // If Not same return False.     
+    if (password1 != password2) {
+      alert("\nPasswords did not match - Please try again..")
+      return false;
+    }
+  } 
+</script>
+
+</html>

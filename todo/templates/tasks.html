@@ -1,0 +1,151 @@
+{% include 'base.html' %}
+{% block content %}
+<div class="col-sm-6 col-lg-5 mb-4" style="position: absolute; left: 30%; top: 8rem;">
+    <div class="container">
+        {% if tasks %}
+            {% for task in tasks %}
+                <div class="card" style="height: 10rem; margin-top: 1rem;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-align: center;">{{ task.title }}</h5>
+                        <p class="card-text" style="text-align: center;">{{ task.description }}</p>
+                    </div>
+                    <button class="delete" data-task-id="{{ task.id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                          </svg>
+                    </button>
+                    <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom: auto">
+                        <small class="text-body-secondary">{{ task.created | timesince }} ago</small>
+                    </p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center">
+                <p>No tasks pending</p>
+            </div>
+        {% endif %}
+    </div>
+    
+</div>
+</div>
+
+<style>
+    .delete {
+        margin-left: 2rem;
+        margin-top: 1rem;
+        width: fit-content;
+        border-radius: 50%;
+        background: #3e4684;
+        color: white;
+        cursor: pointer;
+        /* Add cursor pointer to indicate clickability */
+    }
+
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        /* Semi-transparent background */
+        filter: blur(5px);
+        /* Adjust the blur effect as needed */
+        z-index: 0;
+        /* Ensure it's above other content */
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".delete");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                const taskId = event.currentTarget.getAttribute("data-task-id");
+                const taskTitle = event.currentTarget.parentNode.querySelector(".card-title").textContent;
+
+                // Create a backdrop to blur the remaining background
+                const backdrop = document.createElement("div");
+                backdrop.classList.add("backdrop");
+                document.body.appendChild(backdrop);
+
+                // Calculate the position for the popover
+                const buttonRect = event.currentTarget.getBoundingClientRect();
+                const popoverLeft = buttonRect.right + window.scrollX;
+                const popoverTop = buttonRect.top + window.scrollY;
+
+                const popoverContent = `
+                <form class = "form" action ="" method = "POST">
+                    {%csrf_token%}
+                    <div class="popover" style="text-align: center; position: absolute; left: ${popoverLeft}px; top: ${popoverTop}px;">
+                        <div class="popover-header" style="background: #3e4684; color: white;">
+                            Are you sure you want to delete?
+                        </div>
+                        <div class="popover-body">
+                            <p>${taskTitle}</p>
+                            <button class="btn btn-danger" id="confirmDelete">Confirm</button>
+                        </div>
+                    </div>
+                </form>
+                `;
+
+                // Create a new popover element
+                const popover = document.createElement("div");
+                popover.innerHTML = popoverContent;
+
+                // Add the popover to the document
+                document.body.appendChild(popover);
+
+                // Add a click event to the confirm button
+                const confirmButton = popover.querySelector("#confirmDelete");
+                confirmButton.addEventListener("click", function () {
+                    // Send an AJAX request to delete the message
+                    fetch(`/delete_message/${taskId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'), // Include the CSRF token
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Handle successful deletion, e.g., remove the card
+                                const cardToDelete = document.querySelector(`.card[data-task-id="${taskId}"]`);
+                                cardToDelete.remove();
+                            } else {
+                                // Handle deletion failure
+                                console.error('Message deletion failed.');
+                            }
+
+                            // Close the popover
+                            backdrop.remove();
+                            popover.remove();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+        });
+    });
+
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+
+
+{% endblock content %}
