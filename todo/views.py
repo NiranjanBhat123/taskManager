@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import Task
+from datetime import datetime
 
 
 # Create your views here.
@@ -58,11 +59,15 @@ def home(request):
     if request.method == "POST":
         title = request.POST.get("title")
         description = request.POST.get("description")
+        date = request.POST.get("date")
+        if not date:
+            date = None
         user = request.user
         Task.objects.create(
             user = user,
             title = title,
             description= description,
+            deadline = date,
             
         )
         return redirect('/')
@@ -72,7 +77,8 @@ def home(request):
 @login_required(login_url='login/')
 def tasks(request):
     tasks = Task.objects.filter(user=request.user)
-    context = {'tasks':tasks,'user':request.user}
+    now = datetime.now().date
+    context = {'tasks':tasks,'user':request.user,'now':now}
     return render(request,'tasks.html',context)
 
 @login_required(login_url='login/')

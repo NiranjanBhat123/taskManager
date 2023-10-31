@@ -3,36 +3,73 @@
 <div class="col-sm-6 col-lg-5 mb-4" style="position: absolute; left: 30%; top: 8rem;">
     <div class="container">
         {% if tasks %}
-            {% for task in tasks %}
-                <div class="card" style="height: 10rem; margin-top: 1rem;">
-                    <div class="card-body">
-                        <h5 class="card-title" style="text-align: center;">{{ task.title }}</h5>
-                        <p class="card-text" style="text-align: center;">{{ task.description }}</p>
-                    </div>
-                    <button class="delete" data-task-id="{{ task.id }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
-                          </svg>
-                    </button>
-                    <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom: auto">
-                        <small class="text-body-secondary">{{ task.created | timesince }} ago</small>
-                    </p>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="text-center">
-                <p>No tasks pending</p>
+        {% for task in tasks %}
+        <div class="card" style="height: 12rem; margin-top: 1rem; display: flex; align-items: center;">
+            <div class="card-body" style="flex: 1;margin-bottom:2rem;">
+                <h5 class="card-title" style="text-align: center;">{{ task.title }}</h5>
+                <p class="card-text" style="text-align: center;">{{ task.description }}</p>
             </div>
+
+            {% if task.deadline %}
+            {% if task.deadline > now %}
+            <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom:-2rem;">
+                <small class="deadline-container upcoming">deadline : {{ task.deadline }}</small>
+            </p>
+            {% else %}
+            <p class="card-text" style="text-align: right; margin-right: 1rem;margin-bottom:-2rem;">
+                <small class="deadline-container passed">deadline passed !</small>
+            </p>
+            {% endif %}
+            {% else %}
+            <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom:-2rem;">
+                <small class="deadline-container upcoming">no deadline assigned</small>
+            </p>
+            {% endif %}
+
+            <button class="delete" data-task-id="{{ task.id }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                </svg>
+            </button>
+
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="text-center">
+            <p>No tasks pending</p>
+        </div>
         {% endif %}
     </div>
-    
-</div>
 </div>
 
+
 <style>
+    /* Add this to your CSS stylesheet */
+    .deadline-container {
+        width: 13rem;
+        text-align: center;
+        margin-left: 16rem;
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    .passed {
+        background-color: #fd5c63;
+        color: white;
+    }
+
+    .upcoming {
+        background-color: #98FB98;
+    }
+
     .delete {
-        margin-left: 2rem;
-        margin-top: 1rem;
+        margin-left: -20rem;
+        margin-bottom: 4rem;
         width: fit-content;
         border-radius: 50%;
         background: #3e4684;
@@ -83,7 +120,8 @@
                         </div>
                         <div class="popover-body">
                             <p>${taskTitle}</p>
-                            <button class="btn btn-danger" id="confirmDelete">Confirm</button>
+                            <button class="btn btn-danger" id="confirmDelete">confirm</button>
+                            <button class="btn btn-secondary" id="cancel">cancel</button>
                         </div>
                     </div>
                 </form>
