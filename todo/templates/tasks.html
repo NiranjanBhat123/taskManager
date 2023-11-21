@@ -3,50 +3,63 @@
 <div class="col-sm-6 col-lg-5 mb-4" style="position: absolute; left: 30%; top: 8rem;">
     <div class="container">
         {% if tasks %}
-        {% for task in tasks %}
-        <div class="card" style="height: 12rem; margin-top: 1rem; display: flex; align-items: center;">
-            <div class="card-body" style="flex: 1;margin-bottom:2rem;">
-                <h5 class="card-title" style="text-align: center;">{{ task.title }}</h5>
-                <p class="card-text" style="text-align: center;">{{ task.description }}</p>
-            </div>
+            {% for task in tasks %}
+                {% if not task.completed %}
+                    <div class="card" style="height: 12rem; padding-left:2rem; margin-top: 1rem; display: inline-block; align-items: center;">
+                        <div class="card-body" style="flex: 1;margin-bottom:2rem;">
+                            <h5 class="card-title" style="text-align: center;">{{ task.title }}</h5>
+                            <p class="card-text" style="text-align: center;">{{ task.description }}</p>
+                        </div>
 
-            {% if task.deadline %}
-            {% if task.deadline > now %}
-            <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom:-2rem;">
-                <small class="deadline-container upcoming">deadline : {{ task.deadline }}</small>
-            </p>
-            {% else %}
-            <p class="card-text" style="text-align: right; margin-right: 1rem;margin-bottom:-2rem;">
-                <small class="deadline-container passed">deadline passed !</small>
-            </p>
-            {% endif %}
-            {% else %}
-            <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom:-2rem;">
-                <small class="deadline-container upcoming">no deadline assigned</small>
-            </p>
-            {% endif %}
+                        {% if task.deadline %}
+                            {% if task.deadline > now %}
+                                <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom:-2rem;">
+                                    <small class="deadline-container upcoming">deadline : {{ task.deadline }}</small>
+                                </p>
+                            {% else %}
+                                <p class="card-text" style="text-align: right; margin-right: 1rem;margin-bottom:-2rem;">
+                                    <small class="deadline-container passed">deadline passed !</small>
+                                </p>
+                            {% endif %}
+                        {% else %}
+                            <p class="card-text" style="text-align: right; margin-right: 1rem; margin-bottom:-2rem;">
+                                <small class="deadline-container upcoming">no deadline assigned</small>
+                            </p>
+                        {% endif %}
 
-            <button class="delete" data-task-id="{{ task.id }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                    <path
-                        d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-                </svg>
-            </button>
+                        <button class="delete" data-task-id="{{ task.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                            </svg>
+                        </button>
 
-        </div>
-        {% endfor %}
+                        <button class="complete" data-task-id="{{ task.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                            </svg>
+                        </button>
+
+                    </div>
+                {% endif %}
+            {% endfor %}
         {% else %}
-        <div class="text-center">
-            <p>No tasks pending</p>
-        </div>
+            <div class="text-center">
+                <p>No tasks pending</p>
+            </div>
         {% endif %}
     </div>
 </div>
+{% endblock content %}
 
 
 <style>
-    /* Add this to your CSS stylesheet */
+
+
+
     .deadline-container {
         width: 13rem;
         text-align: center;
@@ -67,8 +80,8 @@
         background-color: #98FB98;
     }
 
-    .delete {
-        margin-left: -20rem;
+    .delete,
+    .complete {
         margin-bottom: 4rem;
         width: fit-content;
         border-radius: 50%;
@@ -78,6 +91,11 @@
         /* Add cursor pointer to indicate clickability */
     }
 
+    .complete {
+        margin-left: 1rem;
+        /* Adjust the margin to provide space between delete and complete buttons */
+    }
+
     .backdrop {
         position: fixed;
         top: 0;
@@ -85,13 +103,14 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        /* Semi-transparent background */
+       
         filter: blur(5px);
-        /* Adjust the blur effect as needed */
+       
         z-index: 0;
-        /* Ensure it's above other content */
+       
     }
 </style>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const deleteButtons = document.querySelectorAll(".delete");
@@ -168,6 +187,9 @@
     });
 
 
+
+
+
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -184,6 +206,94 @@
     }
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const completedButtons = document.querySelectorAll(".complete");
+
+        completedButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                const taskId = event.currentTarget.getAttribute("data-task-id");
+                const taskTitle = event.currentTarget.parentNode.querySelector(".card-title").textContent;
+
+                // Create a backdrop to blur the remaining background
+                const backdrop = document.createElement("div");
+                backdrop.classList.add("backdrop");
+                document.body.appendChild(backdrop);
+
+                // Calculate the position for the popover
+                const buttonRect = event.currentTarget.getBoundingClientRect();
+                const popoverLeft = buttonRect.right + window.scrollX;
+                const popoverTop = buttonRect.top + window.scrollY;
+
+                const popoverContent = `
+                <form class = "form" action ="" method = "POST">
+                    {%csrf_token%}
+                    <div class="popover" style="text-align: center; position: absolute; left: ${popoverLeft}px; top: ${popoverTop}px;">
+                        <div class="popover-header" style="background: #3e4684; color: white;">
+                            Do you want to mark it as complete?
+                        </div>
+                        <div class="popover-body">
+                            <p>${taskTitle}</p>
+                            <button class="btn btn-success" id="confirmComplete">confirm</button>
+                            <button class="btn btn-secondary" id="cancel">cancel</button>
+                        </div>
+                    </div>
+                </form>
+                `;
+
+                // Create a new popover element
+                const popover = document.createElement("div");
+                popover.innerHTML = popoverContent;
+
+                // Add the popover to the document
+                document.body.appendChild(popover);
+
+                // Add a click event to the confirm button
+                const confirmButton = popover.querySelector("#confirmComplete");
+                confirmButton.addEventListener("click", function () {
+                    // Send an AJAX request to delete the message
+                    fetch(`/completed/${taskId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'), // Include the CSRF token
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Handle successful deletion, e.g., remove the card
+                                const cardToComplete = document.querySelector(`.card[data-task-id="${taskId}"]`);
+                                cardToComplete.remove();
+                            } else {
+                                // Handle deletion failure
+                                console.error('Message deletion failed.');
+                            }
+
+                            // Close the popover
+                            backdrop.remove();
+                            popover.remove();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            });
+        });
+    });
 
 
-{% endblock content %}
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>

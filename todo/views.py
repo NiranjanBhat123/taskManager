@@ -88,15 +88,23 @@ def logoutt(request):
     return redirect('/')
 
 
+@login_required(login_url='login/')
+def completed(request,message_id):
+    task = get_object_or_404(Task,id = message_id)
+    print(f"marking {task} as completed")
+    if request.method== 'POST':
+        print(task,task.completed)
+        task.completed = True
+        print(task,task.completed)
+        task.save()
+        return JsonResponse({'success':True})
+    return JsonResponse({'sucess':False})
+
 
 @login_required(login_url='login/')
 def delete_message(request, message_id):
-    # Assuming you have a Message model, you can retrieve the message to delete
     message = get_object_or_404(Task, id=message_id)
-
-    # Check if the request method is POST to prevent accidental deletions
     if request.method == 'POST':
-        # Delete the message
         message.delete()
         return JsonResponse({'success': True})
 
