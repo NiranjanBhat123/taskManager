@@ -3,6 +3,10 @@ features :
 
 
 
+https://github.com/NiranjanBhat123/taskManager/assets/111105882/e70e20ca-9006-414d-b2e4-06b6c5272d61
+
+
+
 * login , signup and logout using django authentication
 * able to add task , description and deadline to complete the task in the form of popover created with javascript
 
@@ -10,7 +14,7 @@ features :
 * able to delete task in a popover. uses javascript AJAX request to get the ID of the task to be deleted.
   demo displayed here :
   
-https://github.com/NiranjanBhat123/taskManager/assets/111105882/accb506d-54d1-4c46-8a64-5da981e55100
+
 
 
 
