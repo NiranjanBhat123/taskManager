@@ -1,0 +1,84 @@
+{% include 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4">
+                <div class="card bg-light">
+                    <div class="card-body" style="text-align: center;">
+                        <h5 class="card-title">Total Tasks</h5>
+                        <p class="card-text h3">{{ total_tasks }}</p>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="col-md-4 mb-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body" style="text-align: center;">
+                        <h5 class="card-title">Completed Tasks</h5>
+                        <p class="card-text h3">{{ completed_tasks }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-danger text-white">
+                    <div class="card-body" style="text-align: center;">
+                        <h5 class="card-title">Overdue Tasks</h5>
+                        <p class="card-text h3">{{ overdue_tasks }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <!-- Empty column to create space between the cards and the chart -->
+            </div>
+            <div style="display: flex;align-items:center;justify-content:center;">
+            <div class="col-md-5" style="display: flex; align-items: center; justify-content: center;">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-align: center;">My Progress Overview</h5>
+                        <canvas id="pieChart" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- ... existing code ... -->
+
+<!-- ... existing code ... -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById('pieChart').getContext('2d');
+        var data = {
+            labels: ['Completed', 'Overdue', 'Pending'],
+            datasets: [{
+                data: [{{ completed_tasks }}, {{ overdue_tasks }}, {{ pending_tasks }}],
+                backgroundColor: ['#98FB98', '#fd5c63', '#808080']
+            }]
+        };
+
+        var options = {
+            responsive: false,
+            maintainAspectRatio: false,
+            cutoutPercentage: 60,
+        };
+
+        var pieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: options
+        });
+    });
+</script>
+
+<!-- ... existing code ... -->
+
+<!-- ... existing code ... -->
+
+
+{% endblock %}

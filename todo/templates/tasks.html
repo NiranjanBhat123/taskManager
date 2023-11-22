@@ -135,10 +135,10 @@
                     {%csrf_token%}
                     <div class="popover" style="text-align: center; position: absolute; left: ${popoverLeft}px; top: ${popoverTop}px;">
                         <div class="popover-header" style="background: #3e4684; color: white;">
-                            Are you sure you want to delete?
+                            Are you sure you want to delete the task " ${taskTitle} "?
                         </div>
                         <div class="popover-body">
-                            <p>${taskTitle}</p>
+                            
                             <button class="btn btn-danger" id="confirmDelete">confirm</button>
                             <button class="btn btn-secondary" id="cancel">cancel</button>
                         </div>
@@ -230,10 +230,10 @@
                     {%csrf_token%}
                     <div class="popover" style="text-align: center; position: absolute; left: ${popoverLeft}px; top: ${popoverTop}px;">
                         <div class="popover-header" style="background: #3e4684; color: white;">
-                            Do you want to mark it as complete?
+                            Do you want to mark the task " ${taskTitle} " as complete?
                         </div>
                         <div class="popover-body">
-                            <p>${taskTitle}</p>
+                           
                             <button class="btn btn-success" id="confirmComplete">confirm</button>
                             <button class="btn btn-secondary" id="cancel">cancel</button>
                         </div>

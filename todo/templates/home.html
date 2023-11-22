@@ -16,7 +16,7 @@
         </button>
 
 
-        <!---popover button code----->
+        <!---popover button code-->
 
 
 
@@ -38,16 +38,20 @@
 
                     <label for="description">Description:</label>
                     <textarea id="description" name="description" required></textarea><br><br>
-                    
+
                     <label for="deadline">Deadline(if required)</label>
-                    <input type="date" name="date" id="date"><br><br>
+                    <input type="text" name="date" id="date"><br><br>
 
                     <button type="submit">Submit</button>
+
+                   
+
+                    
                 </div>
             </form>
 
         </div>
-        
+
         <!-- Overlay background -->
         <div class="overlay" id="overlay"></div>
 
@@ -55,15 +59,18 @@
 
 
 
-        <!---popover code ends---->
+        <!---popover code ends-->
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 <script>
     const addButton = document.getElementById('addTaskButton');
     const popover = document.getElementById('popover');
     const overlay = document.getElementById('overlay');
     const cancelButton = document.getElementById('cancelButton');
+    
 
     // Show the popover and overlay when the "Add Task" button is clicked
     addButton.addEventListener('click', function () {
@@ -82,15 +89,57 @@
         popover.style.display = 'none';
         overlay.style.display = 'none';
     });
+
+
+    
+   
+
+
+
+    
+
+
+
+
 </script>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var picker = new Pikaday({
+            field: document.getElementById('date'),
+            format: 'YYYY-MM-DD', // Customize the date format if needed
+            yearRange: [1900, moment().year()], // Specify the range of selectable years
+            showYearDropdown: true, // Show a dropdown for selecting the year
+            // Additional configuration options can be found in the Pikaday documentation
+        });
+    });
+
+
+    
+
+</script>
+
+
+
+
+
+
 <style>
+    /* Custom styles for the date picker */
+    .pika-single {
+        z-index: 9999;
+        /* Ensure the date picker appears above other elements */
+    }
+
+
+    
     form {
 
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 60vh;
+        height: 70vh;
     }
 
     .container {
@@ -147,7 +196,7 @@
 
     /* Styles for the overlay background */
     .overlay {
-        
+
         display: none;
         position: fixed;
         top: 0;

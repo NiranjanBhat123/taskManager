@@ -8,6 +8,8 @@ from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import Task
 from datetime import datetime
+from django.utils import timezone
+
 
 
 # Create your views here.
@@ -109,6 +111,23 @@ def delete_message(request, message_id):
         return JsonResponse({'success': True})
 
     return JsonResponse({'success': False})
+
+
+@login_required(login_url='login/')
+def profile(request):
+    user = request.user
+    total_tasks = Task.objects.filter(user=user).count()
+    completed_tasks = Task.objects.filter(user=user,completed=True).count()
+    overdue_tasks = Task.objects.filter(user=user, deadline__lt=timezone.now(), completed=False).count()
+
+    pending_tasks = total_tasks - completed_tasks - overdue_tasks
+    context = {
+        'total_tasks': total_tasks,
+        'completed_tasks': completed_tasks,
+        'overdue_tasks': overdue_tasks,
+        'pending_tasks': pending_tasks,
+    }
+    return render(request,'profile.html',context)
 
 
 

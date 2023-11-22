@@ -10,6 +10,7 @@ urlpatterns = [
     path("signup/",views.signupp,name="signupp"),
     path("logout/",views.logoutt,name="logoutt"),
     path("tasks/",views.tasks,name= "tasks"),
+    path('profile/',views.profile,name = "profile"),
     path('delete_message/<int:message_id>/', views.delete_message, name='delete_message'),
     path('completed/<int:message_id>/', views.completed, name='completed'),
 
